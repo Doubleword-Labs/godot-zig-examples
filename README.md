@@ -3,7 +3,7 @@ Examples for godot-zig
 
 ## Build
 
-1. git clone https://github.com/godot-zig/godot-zig-examples
+1. git clone https://github.com/doubleword-labs/godot-zig-examples
 2. zig build run
 
 ## Options
