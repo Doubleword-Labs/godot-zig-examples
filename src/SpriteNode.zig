@@ -1,33 +1,33 @@
 const std = @import("std");
-const Godot = @import("godot");
-const Vec2 = Godot.Vector2;
+const godot = @import("godot");
+const Vec2 = godot.Vector2;
 const Sprite = struct {
     pos: Vec2,
     vel: Vec2,
     scale: Vec2,
-    gd_sprite: Godot.Sprite2D,
+    gd_sprite: godot.Sprite2D,
 };
 const Self = @This();
-pub usingnamespace Godot.Control;
-base: Godot.Control,
+pub usingnamespace godot.Control;
+base: godot.Control,
 
 sprites: std.ArrayList(Sprite) = undefined,
 
 pub fn newSpritesNode() *Self {
-    var self = Godot.create(Self);
+    var self = godot.create(Self);
     self.example_node = null;
 }
 
 pub fn _ready(self: *Self) void {
-    if (Godot.Engine.getSingleton().isEditorHint()) return;
+    if (godot.Engine.getSingleton().isEditorHint()) return;
 
-    self.sprites = std.ArrayList(Sprite).init(Godot.general_allocator);
-    const rnd = Godot.initRandomNumberGenerator();
-    defer _ = Godot.unreference(rnd);
+    self.sprites = std.ArrayList(Sprite).init(godot.general_allocator);
+    const rnd = godot.initRandomNumberGenerator();
+    defer _ = godot.unreference(rnd);
 
-    const resource_loader = Godot.ResourceLoader.getSingleton();
-    const tex = resource_loader.load("res://textures/logo.png", "", Godot.ResourceLoader.CACHE_MODE_REUSE);
-    defer _ = Godot.unreference(tex.?);
+    const resource_loader = godot.ResourceLoader.getSingleton();
+    const tex = resource_loader.load("res://textures/logo.png", "", godot.ResourceLoader.CACHE_MODE_REUSE);
+    defer _ = godot.unreference(tex.?);
     const sz = self.getParentAreaSize();
 
     for (0..10000) |_| {
@@ -36,12 +36,12 @@ pub fn _ready(self: *Self) void {
             .pos = Vec2.new(@floatCast(rnd.randfRange(0, sz.x)), @floatCast(rnd.randfRange(0, sz.y))),
             .vel = Vec2.new(@floatCast(rnd.randfRange(-1000, 1000)), @floatCast(rnd.randfRange(-1000, 1000))),
             .scale = Vec2.set(s),
-            .gd_sprite = Godot.initSprite2D(),
+            .gd_sprite = godot.initSprite2D(),
         };
         spr.gd_sprite.setTexture(tex);
         spr.gd_sprite.setRotation(rnd.randfRange(0, 3.14));
         spr.gd_sprite.setScale(spr.scale);
-        self.addChild(spr.gd_sprite, false, Godot.Node.INTERNAL_MODE_DISABLED);
+        self.addChild(spr.gd_sprite, false, godot.Node.INTERNAL_MODE_DISABLED);
         self.sprites.append(spr) catch unreachable;
     }
 }
